@@ -10,7 +10,8 @@ supported hooks are:
 * **terraform-fmt**: Automatically run `terraform fmt` on all Terraform code (`*.tf` files).
 * **terraform-validate**: Automatically run `terraform validate` on all Terraform code (`*.tf` files).
 * **packer-validate**: Automatically run `packer validate` on all Packer code (`*.pkr.*` files).
-* **terragrunt-hclfmt**: Automatically run `terragrunt hclfmt` on all Terragrunt configurations.
+* **terragrunt-hclfmt**: Automatically run `terragrunt hclfmt` on all Terragrunt configurations (deprecated, use `terragrunt-hcl-fmt` instead if you are using Terragrunt 0.77.22 or later).
+* **terragrunt-hcl-fmt**: Automatically run `terragrunt hcl fmt` on all Terragrunt configurations (requires Terragrunt 0.77.22 or later).
 * **tflint**: Automatically run [`tflint`](https://github.com/terraform-linters/tflint) on all OpenTofu/Terraform code (`*.tf`, `*.tofu` files).
 * **shellcheck**: Run [`shellcheck`](https://www.shellcheck.net/) to lint files that contain a bash [shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)).
 * **gofmt**: Automatically run `gofmt` on all Golang code (`*.go` files).
@@ -22,10 +23,6 @@ supported hooks are:
 * **markdown-link-check** Automatically run [markdown-link-check](https://github.com/tcort/markdown-link-check) on
   markdown doc files.
 * **sentinel-fmt**: Automatically run `sentinel fmt` on all Sentinel code (`*.sentinel.*` files).
-
-
-
-
 
 ## General Usage
 
@@ -44,18 +41,14 @@ repos:
       - id: golint
 ```
 
-Next, have every developer: 
+Next, have every developer:
 
 1. Install [pre-commit](http://pre-commit.com/). E.g. `brew install pre-commit`.
 1. Run `pre-commit install` in the repo.
 
 That’s it! Now every time you commit a code change (`.tf` file), the hooks in the `hooks:` config will execute.
 
-
-
-
 ## Running Against All Files At Once
-
 
 ### Example: Formatting all files
 
@@ -64,8 +57,6 @@ If you'd like to format all of your code at once (rather than one file at a time
 ```bash
 pre-commit run tofu-fmt --all-files
 ```
-
-
 
 ### Example: Enforcing in CI
 
@@ -80,9 +71,6 @@ pre-commit run --all-files
 
 If all the hooks pass, the last command will exit with an exit code of 0. If any of the hooks make changes (e.g.,
 because files are not formatted), the last command will exit with a code of 1, causing the build to fail.
-
-
-
 
 ## Helm Lint Caveats
 
@@ -129,7 +117,7 @@ containerImage: nginx
 
 Now when the pre-commit hook runs, it will call `helm lint` with both `linter_values.yaml` and `values.yaml`:
 
-```
+```bash
 helm lint -f values.yaml -f linter_values.yaml .
 ```
 
@@ -153,7 +141,7 @@ repos:
 
 With the introduction of `--chdir` into tflint, the `--config` argument is now bound to whatever subdirectory you are
 running the check against.  For mono-repos this isn't ideal as you may have a central configuration file you'd like to
-use.  If this matches your use-case, you can specify the placeholder `__GIT_ROOT__` value in the `--config` argument 
+use.  If this matches your use-case, you can specify the placeholder `__GIT_ROOT__` value in the `--config` argument
 that will evaluate to the root of the repository you are in.
 
 ```yaml

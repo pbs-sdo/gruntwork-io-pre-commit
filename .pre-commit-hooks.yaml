@@ -64,6 +64,18 @@
       \.terragrunt-cache\/.*|
     )$
 
+- id: terragrunt-hcl-fmt
+  name: Terragrunt hcl fmt
+  description: Rewrites all Terragrunt configuration files to a canonical format
+  entry: hooks/terragrunt-hcl-fmt.sh
+  language: script
+  files: \.hcl$
+  exclude: >
+    (?x)^(
+      \.terraform\/.*|
+      \.terragrunt-cache\/.*|
+    )$
+
 - id: shellcheck
   name: Shellcheck Bash Linter
   description: Performs linting on bash scripts
@@ -98,7 +110,6 @@
   name: golangci-lint
   description: golangci-lint is a Go linters aggregator
   entry: hooks/golangci-lint.sh
-  language: script
   language: script
   files: \.go$
   require_serial: true
